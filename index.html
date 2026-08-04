@@ -12,8 +12,7 @@
         }
         body {
             font-family: 'Georgia', serif;
-            /* Общий фон: переименуйте ваше фоновое фото в bg.jpg */
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('bg.jpg') no-repeat center center fixed;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('bg.jpeg') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
             display: flex;
@@ -22,6 +21,20 @@
             min-height: 100vh;
             overflow-x: hidden;
             text-align: center;
+            position: relative;
+        }
+        /* Мерцающие звезды */
+        .star {
+            position: fixed;
+            background-color: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: blink infinite ease-in-out;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
         .container {
             background: rgba(255, 255, 255, 0.12);
@@ -35,7 +48,7 @@
             z-index: 2;
             animation: fadeIn 2s ease-in-out;
         }
-        .photo-frame {
+        .slider-container {
             width: 220px;
             height: 220px;
             margin: 0 auto 30px;
@@ -43,11 +56,20 @@
             border: 5px solid #ff4d6d;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            position: relative;
         }
-        .photo-frame img {
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .slide.active {
+            opacity: 1;
         }
         h1 {
             font-size: 3.2rem; 
@@ -90,7 +112,24 @@
             background: #ff758f;
             transform: scale(1.05);
         }
-        /* Анимация падающих сердечек */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 77, 109, 0.8);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            transition: background 0.3s;
+        }
+        .music-toggle:hover {
+            background: rgba(255, 117, 143, 0.9);
+        }
         .heart {
             position: fixed;
             color: #ff4d6d;
@@ -115,10 +154,22 @@
 </head>
 <body>
 
+    <audio id="bg-music" src="mot.mp3" loop></audio>
+    <button class="music-toggle" id="music-btn" onclick="toggleMusic()">🎵 Звук: Выкл</button>
+
     <div class="container">
-        <!-- Главное фото: переименуйте фото вашей принцессы в princess.jpg -->
-        <div class="photo-frame">
-            <img src="princess.jpg" alt="Моя принцесса">
+        <!-- Слайдер со смешанными форматами -->
+        <div class="slider-container">
+            <img src="p1.jpeg" class="slide active" alt="Фото 1">
+            <img src="p2.jpeg" class="slide" alt="Фото 2">
+            <img src="p3.jpeg" class="slide" alt="Фото 3">
+            <img src="p4.jpeg" class="slide" alt="Фото 4">
+            <img src="p5.dng" class="slide" alt="Фото 5">
+            <img src="p6.dng" class="slide" alt="Фото 6">
+            <img src="p7.dng" class="slide" alt="Фото 7">
+            <img src="p8.dng" class="slide" alt="Фото 8">
+            <img src="p9.jpeg" class="slide" alt="Фото 9">
+            <img src="p10.dng" class="slide" alt="Фото 10">
         </div>
         
         <h1>3 года вместе!</h1>
@@ -137,6 +188,56 @@
     </div>
 
     <script>
+        // --- Генератор звезд ---
+        function createStars() {
+            for (let i = 0; i < 40; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDuration = Math.random() * 3 + 1.5 + 's';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Музыкальный плеер
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        document.body.addEventListener('click', () => {
+            if (music.paused) {
+                music.play().then(() => {
+                    musicBtn.innerHTML = '🎵 Звук: Вкл';
+                }).catch(e => console.log("Блокировка звука"));
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                musicBtn.innerHTML = '🎵 Звук: Вкл';
+            } else {
+                music.pause();
+                musicBtn.innerHTML = '🎵 Звук: Выкл';
+            }
+        }
+
+        // Логика слайдера
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(nextSlide, 3000);
+
+        // Падающие сердечки
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -148,11 +249,8 @@
             document.body.appendChild(heart);
             setTimeout(() => { heart.remove(); }, 5000);
         }
-        
-        // Автоматический спавн
         setInterval(createHeart, 350);
 
-        // Взрыв сердечек по кнопке
         function burstHearts() {
             for(let i = 0; i < 20; i++) {
                 setTimeout(createHeart, i * 80);
