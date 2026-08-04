@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 года вместе!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            /* Общий фон: переименуйте ваше фоновое фото в bg.jpg */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            padding: 45px 25px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            max-width: 550px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.25);
+            z-index: 2;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .photo-frame {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            border: 5px solid #ff4d6d;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        h1 {
+            font-size: 3.2rem; 
+            margin-bottom: 20px; 
+            color: #ff4d6d;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+        }
+        .main-text {
+            font-size: 1.7rem; 
+            line-height: 1.8; 
+            font-weight: bold; 
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+        .sub-text {
+            font-size: 1.5rem; 
+            line-height: 1.7; 
+            margin-bottom: 30px; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .green-text {
+            color: #4ade80; 
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .heart-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.5);
+            font-weight: bold;
+        }
+        .heart-btn:hover {
+            background: #ff758f;
+            transform: scale(1.05);
+        }
+        /* Анимация падающих сердечек */
+        .heart {
+            position: fixed;
+            color: #ff4d6d;
+            position: absolute;
+            top: -10%;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) translateX(120px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Главное фото: переименуйте фото вашей принцессы в princess.jpg -->
+        <div class="photo-frame">
+            <img src="princess.jpg" alt="Моя принцесса">
+        </div>
+        
+        <h1>3 года вместе!</h1>
+        
+        <p class="main-text">
+            Спасибо за наше знакомство! <br>
+            Оно невероятное и дано нам судьбой... ☺️🥰💋🍓🫂💦
+        </p>
+        
+        <p class="sub-text">
+            Спасибо за эти три года, проведенных вместе. Очень тебя люблю! 😍 <br>
+            <span class="green-text">Дальше — больше 💚</span>
+        </p>
+        
+        <button class="heart-btn" onclick="burstHearts()">Нажми меня ❤️</button>
+    </div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 25 + 15 + 'px';
+            heart.style.opacity = Math.random() * 0.6 + 0.4;
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        
+        // Автоматический спавн
+        setInterval(createHeart, 350);
+
+        // Взрыв сердечек по кнопке
+        function burstHearts() {
+            for(let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 80);
+            }
+        }
+    </script>
+</body>
+</html>
